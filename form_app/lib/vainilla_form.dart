@@ -41,7 +41,7 @@ class _VainillaFormState extends State<VainillaForm> {
       return 'Please enter your email';
     }
     final emailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
-    if (!emailRegex.hasMatch(value!)) {
+    if (!emailRegex.hasMatch(value)) {
       return 'Please enter a valid email address';
     }
     return null;
