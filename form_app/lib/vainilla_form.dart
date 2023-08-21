@@ -83,6 +83,16 @@ class _VainillaFormState extends State<VainillaForm> {
         key: _formKey,
         child: Column(
           children: [
+            const Text(
+              'vainilla form',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
             TextFormField(
               decoration: const InputDecoration(
                 labelText: 'Name',
