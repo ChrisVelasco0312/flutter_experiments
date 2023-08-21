@@ -28,6 +28,8 @@ class StepperApp extends StatefulWidget {
 }
 
 class _StepperAppState extends State<StepperApp> {
+  final PageController _pageController = PageController(initialPage: 0);
+
   int _currentStep = 0;
   final List<Widget> _steps = [
     const Step1Screen(),
@@ -51,22 +53,39 @@ class _StepperAppState extends State<StepperApp> {
     });
   }
 
+  void goToStep(int stepIndex) {
+    _pageController.animateToPage(
+      stepIndex,
+      duration: const Duration(milliseconds: 100),
+      curve: Curves.easeInOut,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _steps[_currentStep],
+      body: PageView(controller: _pageController, children: _steps),
       bottomNavigationBar: Padding(
           padding: const EdgeInsets.all(16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ElevatedButton(
-                onPressed: _currentStep > 0 ? _goToPreviousStep : null,
+                onPressed: _currentStep > 0
+                    ? () {
+                        _goToPreviousStep();
+                        goToStep(_currentStep);
+                      }
+                    : null,
                 child: const Text('Back'),
               ),
               ElevatedButton(
-                onPressed:
-                    _currentStep < _steps.length - 1 ? _goToNextStep : null,
+                onPressed: _currentStep < _steps.length - 1
+                    ? () {
+                        _goToNextStep();
+                        goToStep(_currentStep);
+                      }
+                    : null,
                 child: const Text('Next'),
               )
             ],
