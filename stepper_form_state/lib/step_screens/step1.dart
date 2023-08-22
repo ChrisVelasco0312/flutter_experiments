@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class Step1Screen extends StatelessWidget {
-  const Step1Screen({super.key});
+  final Function(int) goToStep;
+
+  const Step1Screen({super.key, required this.goToStep});
 
   @override
   Widget build(BuildContext context) {

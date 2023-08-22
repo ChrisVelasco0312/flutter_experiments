@@ -30,30 +30,11 @@ class StepperApp extends StatefulWidget {
 class _StepperAppState extends State<StepperApp> {
   final PageController _pageController = PageController(initialPage: 0);
 
+  late List<Widget> _steps;
+
   int _currentStep = 0;
-  final List<Widget> _steps = [
-    const Step1Screen(),
-    const Step2Screen(),
-    const Step3Screen()
-  ];
 
-  void _goToNextStep() {
-    setState(() {
-      if (_currentStep < _steps.length - 1) {
-        _currentStep++;
-      }
-    });
-  }
-
-  void _goToPreviousStep() {
-    setState(() {
-      if (_currentStep > 0) {
-        _currentStep--;
-      }
-    });
-  }
-
-  void goToStep(int stepIndex) {
+  void _goToStep(int stepIndex) {
     _pageController.animateToPage(
       stepIndex,
       duration: const Duration(milliseconds: 100),
@@ -62,9 +43,23 @@ class _StepperAppState extends State<StepperApp> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _steps = [
+      Step1Screen(goToStep: _goToStep),
+      Step2Screen(goToStep: _goToStep),
+      Step3Screen(goToStep: _goToStep),
+    ];
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(controller: _pageController, children: _steps),
+      body: PageView(
+        controller: _pageController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: _steps,
+      ),
       bottomNavigationBar: Padding(
           padding: const EdgeInsets.all(16),
           child: Row(
@@ -73,8 +68,10 @@ class _StepperAppState extends State<StepperApp> {
               ElevatedButton(
                 onPressed: _currentStep > 0
                     ? () {
-                        _goToPreviousStep();
-                        goToStep(_currentStep);
+                        setState(() {
+                          _currentStep--;
+                        });
+                        _goToStep(_currentStep);
                       }
                     : null,
                 child: const Text('Back'),
@@ -82,8 +79,10 @@ class _StepperAppState extends State<StepperApp> {
               ElevatedButton(
                 onPressed: _currentStep < _steps.length - 1
                     ? () {
-                        _goToNextStep();
-                        goToStep(_currentStep);
+                        setState(() {
+                          _currentStep++;
+                        });
+                        _goToStep(_currentStep);
                       }
                     : null,
                 child: const Text('Next'),
